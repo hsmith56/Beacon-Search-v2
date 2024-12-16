@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/style.css" />
+    <script src="../static/htmx.min.js"></script>
+    <!--<script src="https://unpkg.com/htmx.org@1.6.1"></script> -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../static/style.css" />
+    <script src="../static/flowbite.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>  -->
+    <script>
+      window.onload = function () {
+        // Function to update the row count in the div
+        function updateRowCount() {
+          var tableRows = document.querySelectorAll("#table-body tr").length;
+          document.getElementById("rowCount").innerHTML =
+            "Number of Students: " + tableRows;
+        }
+    
+        // Initial count when the page loads
+        updateRowCount();
+    
+        // Set up a MutationObserver to watch for changes in the table
+        var table = document.getElementById("table-body");
+        var observer = new MutationObserver(updateRowCount);
+    
+        // Configuration for the observer
+        var config = {
+          childList: true, // Observe direct children
+          subtree: false   // Don't observe deeper in the DOM
+        };
+    
+        // Start observing the target node for configured mutations
+        observer.observe(table, config);
+      };
+    </script>
+    <title>Exchange Student Search</title>
+  </head>
+  <body>
+    <div style="overflow: hidden;" class="bg-customBlue pt-1 px-6 pb-1 text-white text-left">
+      <h2 class="text-lg font-semibold">MEET THE STUDENTS</h2>
+      <p class="mt-1" style="float: left;">Click on a student's name to learn more</p>
+      <!-- <p style="float: right;">test</p> -->
+    </div>
+    <div id="all_search_elems" class="bg-gray-300 relative p-2 rounded-lg shadow-md">
+      <div id="filters" class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        
+        <div>
+          <label for="country" class="block text-sm font-semibold">Country of Origin</label>
+          <select name="country" id="country" class="bg-gray-200 rounded text-sm p-1 w-full">
+            {% include 'countries.html' %}
+          </select>
+        </div>
+    
+        <div>
+          <label for="interests" class="block text-sm font-semibold">Interests</label>
+          <select name="interests" id="interests" class="bg-gray-200 rounded text-sm p-1 w-full">
+            {% include 'interests.html' %}
+          </select>
+        </div>
+    
+        <div>
+          <label for="state" class="block text-sm font-semibold">State</label>
+          <select name="state" id="state" class="bg-gray-200 rounded text-sm p-1 w-full">
+            {% include 'states.html' %}
+          </select>
+        </div>
+    
+        <div>
+          <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" class="flex items-center justify-center w-full px-2 py-1 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 focus:outline-none transition duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/>
+            </svg>
+            Scholarship Options
+            <svg class="-mr-1 ml-1.5 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path clip-rule="evenodd" fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+            </svg>
+          </button>
+        </div>
+    
+        {% include 'scholarships.html' %}
+    
+        <div>
+          <label for="gender" class="block text-sm font-semibold">Gender:</label>
+          <div class="space-y-1 mt-1">
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="gender" value="male"/>
+              <span class="ml-2 text-sm">Male</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="gender" value="female"/>
+              <span class="ml-2 text-sm">Female</span>
+            </label>
+          </div>
+        </div>
+    
+        <div>
+          <label for="pets" class="block text-sm font-semibold">Pets in Home:</label>
+          <div class="space-y-1 mt-1">
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="pets" value="yes"/>
+              <span class="ml-2 text-sm">Yes</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="pets" value="no"/>
+              <span class="ml-2 text-sm">No</span>
+            </label>
+          </div>
+        </div>
+    
+        <div>
+          <label for="length" class="block text-sm font-semibold">Program Length:</label>
+          <div class="space-y-1 mt-1 grid md:grid-cols-2">
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="length" value="January 10"/>
+              <span class="ml-2 text-sm">10 month Jan</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="length" value="August 10"/>
+              <span class="ml-2 text-sm">10 month Aug</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="length" value="January 5"/>
+              <span class="ml-2 text-sm">5 month Jan</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="length" value="August 5"/>
+              <span class="ml-2 text-sm">5 month Aug</span>
+            </label>
+          </div>
+        </div>
+    
+        <div>
+          <label for="earlyPlacement" class="block text-sm font-semibold">Early Placement?</label>
+          <div class="space-y-1 mt-1">
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-4 w-4" name="earlyPlacement" value="yes"/>
+              <span class="ml-2 text-sm">Yes</span>
+            </label>
+          </div>
+        </div>
+    
+        <div>
+          <label for="gpa" class="block text-sm font-semibold">GPA</label>
+          <select name="gpa" id="gpa" class="bg-gray-200 rounded text-sm p-1 w-full">
+            <option value="any">Show All</option>
+            <option value="high">3.5 +</option>
+            <option value="medium">3+</option>
+            <option value="lower">2.5+</option>
+          </select>
+        </div>
+    
+        <div>
+          <label for="age" class="block text-sm font-semibold">Age</label>
+          <select name="age" id="age" class="bg-gray-200 rounded text-sm p-1 w-full">
+            <option value="any">Show All</option>
+            <option value="18">18</option>
+            <option value="17">17</option>
+            <option value="16">16</option>
+            <option value="15">15</option>
+            <option value="14">14</option>
+          </select>
+        </div>
+    
+        <div>
+          <label for="dietary" class="block text-sm font-semibold">Dietary Restrictions</label>
+          <select name="dietary" id="dietary" class="bg-gray-200 rounded text-sm p-1 w-full">
+            <option value="any">Show All</option>
+            <option value="yes">Has restrictions</option>
+            <option value="no">No restrictions</option>
+          </select>
+        </div>
+    
+        <div>
+          <label for="DP" class="block text-sm font-semibold">Double Placement</label>
+          <select name="DP" id="DP" class="bg-gray-200 rounded text-sm p-1 w-full">
+            <option value="any">Show All</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+          <label for="SP" class="block text-sm font-semibold mt-1">Single Placement</label>
+          <select name="SP" id="SP" class="bg-gray-200 rounded text-sm p-1 w-full">
+            <option value="any">Show All</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+
+<div id="search_bar" class="grid grid-cols-3 gap-4 p-2 bg-gray-100 rounded-lg shadow-md">
+  <input type="text" id="free_text" placeholder="Free Text Search" class="bg-white border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500"/>
+  <input type="text" id="usahsId" placeholder="usahsId Search" class="bg-white border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500"/>
+  <button type="button" class="text-white px-4 py-2 rounded-lg bg-customOrange hover:bg-customHoverOrange focus:outline-none" hx-get="/" hx-target="#table-body" hx-vals="js:{myVals: getOption()}">
+    Find Students
+  </button>
+</div>
+
+    <div id="rowCount" class="ml-2"></div>
+    <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border p-4">
+      <table class="min-w-full table-auto">
+        <thead class="bg-gray-200 text-gray-800 border-b">
+          <tr>
+            <th class="py-3 px-4 text-left text-lg font-semibold">Student Name</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">USAHS ID</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">City Size</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">English Score</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">Grade</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">Age by Start Date</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">Country</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">Program Length</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">Interests</th>
+            <th class="py-3 px-4 text-left text-lg font-semibold">GPA</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm divide-y divide-gray-300" id="table-body">
+          {% include 'table.html' %}
+        </tbody>
+      </table>
+    </div>
+    <script type="text/javascript">
+      function getCheckboxValues(groupName) {
+        var checkboxes = document.querySelectorAll(
+          'input[name="' + groupName + '"]:checked'
+        );
+        var values = [];
+        checkboxes.forEach(function (checkbox) {
+          values.push(checkbox.value);
+        });
+        console.log("Selected values for " + groupName + ":", values);
+        return values;
+        // You can do whatever you want with the selected values here
+      }
+      function getOption() {
+        console.log("HERE");
+        return_json = { gender: getCheckboxValues("gender") };
+
+        var state = document.querySelector("#state").value;
+        return_json["state"] = state;
+
+        var interests = document.querySelector("#interests").value;
+        return_json["interests"] = interests;
+
+        var gpa = document.querySelector("#gpa").value;
+        return_json["gpa"] = gpa;
+
+        var free_text = document.querySelector("#free_text").value;
+        return_json["free_text"] = free_text;
+
+        // var pets = document.querySelector('#pets').value;
+        return_json["pets"] = getCheckboxValues("pets");
+
+        return_json["early_placement"] = getCheckboxValues("earlyPlacement")[0];
+
+        var usahsId = document.querySelector("#usahsId").value;
+        return_json["usahsId"] = usahsId;
+
+        // var duration = document.querySelector('#length').value;
+        return_json["length"] = getCheckboxValues("length");
+
+        var country = document.querySelector("#country").value;
+        return_json["country"] = country;
+
+        return_json["grant"] = getCheckboxValues("grant");
+
+        var age = document.querySelector("#age").value;
+        return_json["age"] = age;
+        console.log(age);
+
+        var sp = document.querySelector("#SP").value;
+        var dp = document.querySelector("#DP").value;
+        return_json["sp"] = sp;
+        return_json["dp"] = dp;
+
+        return_json["dietary"] = document.querySelector("#dietary").value;
+        // var grant = document.querySelector('#grant').value;
+        // return_json['grant'] = grant;
+
+        // var early_p = document.querySelector('#early_placement').value;
+        // return_json['early_placement'] = state;
+
+        // var html = [state,'&',grade,'&',hobbies,'&',gpa, '&', free_text, '&', pets , '&', usahsId, '&', duration, '&', country, '&', grant, '&', early_p];
+        // console.log(html.join(""));
+
+        // console.log(getCheckboxValues('testing'));
+        console.log(return_json);
+        return JSON.stringify(return_json);
+        // return html.join("");
+      }
+    </script>
+  </body>
+</html>
